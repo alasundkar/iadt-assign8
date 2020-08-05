@@ -22,7 +22,7 @@ after that run below script
 #./cloudformation
 
 ```
-and enter require value
+and enter required value
 
 
 
