@@ -1,0 +1,630 @@
+{
+    "Description": "Creates a VPC with public subnets",
+    "Parameters": {
+        "CIDRvar": {
+ 
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "DefaultRoute": {
+      
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "ImageId": {
+       
+            "Description": "Image ID for base EC2 instance.",
+            "Type": "AWS::EC2::Image::Id"
+        },
+        "InstanceType": {
+            "Description": "Instance type to launch EC2 instances.",
+            "Type": "String"
+        },
+        "KeyNamevar": {
+     
+            "Description": "Enter KeyName",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "Portsvar": {
+         
+            "Description": "Port to be allowed",
+            "Type": "Number"
+        },
+        "Portsvar1": {
+          
+            "Description": "Port to be allowed",
+            "Type": "Number"
+        },
+        "Portsvar2": {
+          
+            "Description": "Port to be allowed",
+            "Type": "Number"
+        },
+        "Portsvar3": {
+            
+            "Description": "Port to be allowed",
+            "Type": "Number"
+        },
+        "Portsvar4": {
+          
+            "Description": "Port to be allowed",
+            "Type": "Number"
+        },
+        "Protocolvar": {
+           
+            "Description": "tcp/udp",
+            "Type": "String"
+        },
+        "SourceIPvar": {
+           
+            "Description": "Enter Source IP to access Services",
+            "Type": "String"
+        },
+        "SubnetAvar": {
+           
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "SubnetBvar": {
+          
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "SubnetCvar": {
+          
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "SubnetDvar": {
+          
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "PrivateSubnetOnevar": {
+            
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "PrivateSubnetTwovar": {
+       
+            "Description": "Enter CIDR for public subnet",
+            "Type": "String"
+        },
+        "DBInstanceClass": {
+            "Type": "String",
+            "Description": "The ID of the second subnet to place the RDS instance into.",
+          
+        },
+        "RDSDBNAME": {
+            "Type": "String",
+            "Description": "The name of the database that is created within the PostgreSQL instance.",
+           
+        },
+        "RDSUSERNAME": {
+            "Type": "String",
+            "Description": "The master user name for the PostgreSQL instance.",
+            "Default": "rupesh"
+        },
+        "RDSPASSWORD": {
+            "Type": "String",
+            "Description": "The master user name for the PostgreSQL instance."
+        }
+    },
+    "Resources": {
+        "AttachGateway": {
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::VPCGatewayAttachment"
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "InternetGateway"
+                    }
+                ]
+            }
+        },
+        "PublicDefaultRoute": {
+            "Properties": {
+                "DestinationCidrBlock": {
+                    "Ref": "DefaultRoute"
+                },
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "PublicRouteAssociationA": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "SubnetA"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "PublicRouteAssociationB": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "SubnetB"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "PublicRouteTable": {
+            "DependsOn": "AttachGateway",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PublicRouteTable"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "SubnetA": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetAvar"
+                },
+                "MapPublicIpOnLaunch": true,
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "SubnetA"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "SubnetB": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetBvar"
+                },
+                "MapPublicIpOnLaunch": false,
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "SubnetB"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "SubnetC": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetCvar"
+                },
+                "MapPublicIpOnLaunch": true,
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "SubnetC"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "SubnetD": {
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetDvar"
+                },
+                "MapPublicIpOnLaunch": true,
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "SubnetD"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "VPC": {
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "CIDRvar"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "VPC"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::VPC"
+        },
+        "WebSecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Enable HTTP access via user defined port",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": {
+                            "Ref": "SourceIPvar"
+                        },
+                        "FromPort": {
+                            "Ref": "Portsvar"
+                        },
+                        "IpProtocol": {
+                            "Ref": "Protocolvar"
+                        },
+                        "ToPort": {
+                            "Ref": "Portsvar"
+                        }
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "SourceIPvar"
+                        },
+                        "FromPort": {
+                            "Ref": "Portsvar1"
+                        },
+                        "IpProtocol": {
+                            "Ref": "Protocolvar"
+                        },
+                        "ToPort": {
+                            "Ref": "Portsvar1"
+                        }
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "SourceIPvar"
+                        },
+                        "FromPort": {
+                            "Ref": "Portsvar2"
+                        },
+                        "IpProtocol": {
+                            "Ref": "Protocolvar"
+                        },
+                        "ToPort": {
+                            "Ref": "Portsvar2"
+                        }
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "SourceIPvar"
+                        },
+                        "FromPort": {
+                            "Ref": "Portsvar3"
+                        },
+                        "IpProtocol": {
+                            "Ref": "Protocolvar"
+                        },
+                        "ToPort": {
+                            "Ref": "Portsvar3"
+                        }
+                    },
+                    {
+                        "CidrIp": {
+                            "Ref": "SourceIPvar"
+                        },
+                        "FromPort": {
+                            "Ref": "Portsvar4"
+                        },
+                        "IpProtocol": {
+                            "Ref": "Protocolvar"
+                        },
+                        "ToPort": {
+                            "Ref": "Portsvar4"
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "WebSecurityGroup"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "PrivateSubnetOne": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        0,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": {
+                    "Ref": "PrivateSubnetOnevar"
+                },
+                "MapPublicIpOnLaunch": false,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PrivateSubnetOne"
+                    }
+                ]
+            }
+        },
+        "PrivateSubnetTwo": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": {
+                    "Ref": "PrivateSubnetTwovar"
+                },
+                "MapPublicIpOnLaunch": false,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PrivateSubnetTwo"
+                    }
+                ]
+            }
+        },
+        "DBSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Access to the RDS instance",
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "DBSecurityGroup"
+                    }
+                ]
+            }
+        },
+        "DBSecurityGroupIngress": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "Description": "Ingress to the RDS instance",
+                "GroupId": {
+                    "Ref": "DBSecurityGroup"
+                },
+                "IpProtocol": -1,
+                "SourceSecurityGroupId": {
+                    "Ref": "WebSecurityGroup"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "DBSecurityGroupIngress"
+                    }
+                ]
+            }
+        },
+        "DBSubnetGroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "Subnet group for the RDS instance",
+                "DBSubnetGroupName": "DBSubnetGroup",
+                "SubnetIds": [
+                    {
+                        "Ref": "PrivateSubnetOne"
+                    },
+                    {
+                        "Ref": "PrivateSubnetTwo"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "DBSubnetGroup"
+                    }
+                ]
+            }
+        },
+        "PostgresInstance": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "Engine": "postgres",
+                "EngineVersion": "9.6.11",
+                "AllocatedStorage": 8,
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        0,
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                },
+                "DBSubnetGroupName": {
+                    "Ref": "DBSubnetGroup"
+                },
+                "DBInstanceClass": {
+                    "Ref": "DBInstanceClass"
+                },
+                "DBName": {
+                    "Ref": "RDSDBNAME"
+                },
+                "MasterUsername": {
+                    "Ref": "RDSUSERNAME"
+                },
+                "MasterUserPassword": {
+                    "Ref": "RDSPASSWORD"
+                },
+                "PubliclyAccessible": false,
+                "MultiAZ": false,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PostgresInstance"
+                    }
+                ],
+                "VPCSecurityGroups": [
+                    {
+                        "Fn::GetAtt": [
+                            "DBSecurityGroup",
+                            "GroupId"
+                        ]
+                    }
+                ]
+            }
+        },
+        "DBRouteAssociationB": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "DBRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "PrivateSubnetOne"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "DBRouteAssociationA": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "DBRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "PrivateSubnetTwo"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "DBRouteTable": {
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "DBRouteTable"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "Instance": {
+            "Properties": {
+                "ImageId": {
+                    "Ref": "ImageId"
+                },
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyNamevar"
+                },
+                "SubnetId": {
+                    "Ref": "SubnetB"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "WebSecurityGroup"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Instance"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Sub": "#!/bin/bash\ntouch /home/ubuntu/rupp\n/bin/echo \"My_name=rupesh2\" /etc/environment\n/bin/echo \"RDS_USERNAME=${ RDSUSERNAME }\" >> /etc/environment\n/bin/echo \"RDS_PASSWORD=${ RDSPASSWORD }\" >> /etc/environment\n/bin/echo \"RDS_DBNAME=${ RDSDBNAME }\" >> /etc/environment\n/bin/echo \"RDSHOST_NAME=${ PostgresInstance.Endpoint.Address }\" >> /etc/environment\n"
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+        }
+    }
+}
