@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#sh csye6225-aws-cf-create-stack.sh
 echo "enter your Application stack"
 read applicationStackName
 
