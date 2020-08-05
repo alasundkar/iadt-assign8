@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "enter your Application stack"
-read applicationStackName
+echo "enter your stack"
+read StackName
 
 echo "enter CIDRvar"
 read CIDRvar
@@ -72,7 +72,7 @@ read RDSPASSWORD
 
 
 aws cloudformation create-stack \
---stack-name ${applicationStackName} \
+--stack-name ${StackName} \
 --template-body file://assign8.json \
 --parameters \
 ParameterKey=CIDRvar,ParameterValue=$CIDRvar \
@@ -101,7 +101,7 @@ ParameterKey=RDSPASSWORD,ParameterValue=$RDSPASSWORD
 # Waiting for the stack to get created
 echo "Congratulations Your Stack is Creating"
 
-echo "Waiting on ${applicationStackName} for create completion..."
+echo "Waiting on ${StackName} for create completion..."
 
-aws cloudformation wait stack-create-complete --stack-name ${applicationStackName}
-aws cloudformation describe-stacks --stack-name ${applicationStackName}
+aws cloudformation wait stack-create-complete --stack-name ${StackName}
+aws cloudformation describe-stacks --stack-name ${StackName}
