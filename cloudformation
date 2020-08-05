@@ -1,0 +1,108 @@
+#!/bin/bash
+
+#sh csye6225-aws-cf-create-stack.sh
+echo "enter your Application stack"
+read applicationStackName
+
+echo "enter CIDRvar"
+read CIDRvar
+
+echo "enter DefaultRoute"
+read DefaultRoute
+
+echo "enter your AMI"
+read ImageId
+
+echo "enter your InstanceType"
+read InstanceType
+
+echo "enter KeyNamevar"
+read KeyNamevar
+
+echo "enter Portsvar"
+read Portsvar
+
+echo "enter Portsvar1"
+read Portsvar1
+
+echo "enter Portsvar2"
+read Portsvar2
+
+echo "enter Portsvar3"
+read Portsvar3
+
+echo "enter Portsvar4"
+read Portsvar4
+
+echo "enter Protocolvar"
+read Protocolvar
+
+echo "enter SourceIPvar"
+read SourceIPvar
+
+echo "enter SubnetAvar"
+read SubnetAvar
+
+echo "enter SubnetBvar"
+read SubnetBvar
+
+echo "enter SubnetCvar"
+read SubnetCvar
+
+echo "enter SubnetDvar"
+read SubnetDvar
+
+echo "enter PrivateSubnetOnevar"
+read PrivateSubnetOnevar
+
+echo "enter PrivateSubnetTwovar"
+read PrivateSubnetTwovar
+
+echo "enter DBInstanceClass"
+read DBInstanceClass
+
+echo "enter RDSDBNAME"
+read RDSDBNAME
+
+echo "enter RDSUSERNAME"
+read RDSUSERNAME
+
+echo "enter RDSPASSWORD"
+read RDSPASSWORD
+
+
+
+aws cloudformation create-stack \
+--stack-name ${applicationStackName} \
+--template-body file://assign8.json \
+--parameters \
+ParameterKey=CIDRvar,ParameterValue=$CIDRvar \
+ParameterKey=DefaultRoute,ParameterValue=$DefaultRoute \
+ParameterKey=ImageId,ParameterValue=$ImageId \
+ParameterKey=InstanceType,ParameterValue=$InstanceType \
+ParameterKey=KeyNamevar,ParameterValue=$KeyNamevar \
+ParameterKey=Portsvar,ParameterValue=$Portsvar \
+ParameterKey=Portsvar1,ParameterValue=$Portsvar1 \
+ParameterKey=Portsvar2,ParameterValue=$Portsvar2 \
+ParameterKey=Portsvar3,ParameterValue=$Portsvar3 \
+ParameterKey=Portsvar4,ParameterValue=$Portsvar4 \
+ParameterKey=Protocolvar,ParameterValue=$Protocolvar \
+ParameterKey=SourceIPvar,ParameterValue=$SourceIPvar \
+ParameterKey=SubnetAvar,ParameterValue=$SubnetAvar \
+ParameterKey=SubnetBvar,ParameterValue=$SubnetBvar \
+ParameterKey=SubnetCvar,ParameterValue=$SubnetCvar \
+ParameterKey=SubnetDvar,ParameterValue=$SubnetDvar \
+ParameterKey=PrivateSubnetOnevar,ParameterValue=$PrivateSubnetOnevar \
+ParameterKey=PrivateSubnetTwovar,ParameterValue=$PrivateSubnetTwovar \
+ParameterKey=DBInstanceClass,ParameterValue=$DBInstanceClass \
+ParameterKey=RDSDBNAME,ParameterValue=$RDSDBNAME \
+ParameterKey=RDSUSERNAME,ParameterValue=$RDSUSERNAME \
+ParameterKey=RDSPASSWORD,ParameterValue=$RDSPASSWORD
+# ParameterKey=AttachmentsBucketName,ParameterValue=$bucket \
+# Waiting for the stack to get created
+echo "Congratulations Your Stack is Creating"
+
+echo "Waiting on ${applicationStackName} for create completion..."
+
+aws cloudformation wait stack-create-complete --stack-name ${applicationStackName}
+aws cloudformation describe-stacks --stack-name ${applicationStackName}

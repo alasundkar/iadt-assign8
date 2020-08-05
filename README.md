@@ -1,29 +1,28 @@
-# README #
+# Assignment 8 IADT #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This script will create VPC, EC2, Internet Gateway, RDS.
+### How to use it ###
 
-### What is this repository for? ###
+```bash
+#aws configure
+```
+and enter secret keys and access keys
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+then  run below commad
 
-### How do I get set up? ###
+```bash
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+git clone https://alasundkar@bitbucket.org/alasundkar/iadt-assign8.git
 
-### Contribution guidelines ###
+cd iadt-assign8 
+```
 
-* Writing tests
-* Code review
-* Other guidelines
+after that run below script
+```bash
+#./cloudformation
 
-### Who do I talk to? ###
+```
+and enter required value
 
-* Repo owner or admin
-* Other community or team contact
+
+

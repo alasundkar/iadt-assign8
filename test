@@ -1,0 +1,28 @@
+#!/bin/bash
+
+aws cloudformation create-stack \
+--stack-name VPC \
+--template-body file://assign8.json \
+--parameters \
+ParameterKey=CIDRvar,ParameterValue="10.0.0.0/16" \
+ParameterKey=DefaultRoute,ParameterValue="0.0.0.0/0" \
+ParameterKey=ImageId,ParameterValue="ami-0e0285cf51926ed3b" \
+ParameterKey=InstanceType,ParameterValue="t2.micro" \
+ParameterKey=KeyNamevar,ParameterValue="my-key" \
+ParameterKey=Portsvar,ParameterValue="22" \
+ParameterKey=Portsvar1,ParameterValue="5432" \
+ParameterKey=Portsvar2,ParameterValue="80" \
+ParameterKey=Portsvar3,ParameterValue="443" \
+ParameterKey=Portsvar4,ParameterValue="8080" \
+ParameterKey=Protocolvar,ParameterValue="tcp" \
+ParameterKey=SourceIPvar,ParameterValue="0.0.0.0/0" \
+ParameterKey=SubnetAvar,ParameterValue="10.0.11.0/24" \
+ParameterKey=SubnetBvar,ParameterValue="10.0.21.0/24" \
+ParameterKey=SubnetCvar,ParameterValue="10.0.31.0/24" \
+ParameterKey=SubnetDvar,ParameterValue="10.0.41.0/24" \
+ParameterKey=PrivateSubnetOnevar,ParameterValue="10.0.51.0/24" \
+ParameterKey=PrivateSubnetTwovar,ParameterValue="10.0.61.0/24" \
+ParameterKey=DBInstanceClass,ParameterValue="db.t2.micro" \
+ParameterKey=RDSDBNAME,ParameterValue="postgresdb" \
+ParameterKey=RDSUSERNAME,ParameterValue="rupesh" \
+ParameterKey=RDSPASSWORD,ParameterValue="Rupesh123"
